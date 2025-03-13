@@ -9,15 +9,33 @@ import adminRoutes from "./routes/adminRoutes.js";
 dotenv.config(); // ✅ Load environment variables first
 
 const app = express();
-app.use(cors({ origin: "https://landing.trichenest.com", credentials: true }));
+
+// ✅ Allow both production & development origins
+const allowedOrigins = [
+  "https://landingpro.trichenest.com",
+  "http://localhost:5173"
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
+// ✅ Handle preflight requests for CORS
+app.options("*", cors());
+
 app.use(express.json());
 
 // ✅ Resend email sender
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ✅ Connect to MongoDB (Only Once)
+// ✅ Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => {
     console.error("MongoDB Connection Error:", err);
@@ -42,7 +60,7 @@ app.post("/api/signup", async (req, res) => {
         from: "info@landingpro.trichenest.com", // ✅ Ensure this domain is verified in Resend
         to: email,
         subject: "Signup Confirmation",
-        text: `Hello, you have successfully signed up with ${email}. Welcome aboard!`,
+        text: `Hello, you have successfully signed up with ${email}. Glad to see you around, We are coming with exciting deals. Stay tuned. Welcome aboard!`,
       });
       console.log("Email Sent:", response);
     } catch (error) {
@@ -58,6 +76,7 @@ app.post("/api/signup", async (req, res) => {
 
 // ✅ User Routes
 app.use("/api/admin", adminRoutes);
+
 app.get("/api/users", async (req, res) => {
   try {
     const users = await User.find();
@@ -81,4 +100,4 @@ app.get("/api/users/:email", async (req, res) => {
 
 // ✅ Start Server (Only Once)
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
