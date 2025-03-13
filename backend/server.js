@@ -9,7 +9,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 dotenv.config(); // ✅ Load environment variables first
 
 const app = express();
-app.use(cors({ origin: "https://landingpro.trichenest.com/", credentials: true })); // ✅ Apply CORS once, before routes
+app.use(cors({ origin: "https://landing.trichenest.com", credentials: true }));
 app.use(express.json());
 
 // ✅ Resend email sender
