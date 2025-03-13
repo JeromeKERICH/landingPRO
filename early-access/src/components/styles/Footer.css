@@ -1,0 +1,22 @@
+.footer {
+    color: #333;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .footer a {
+    color: #6a0dada2;
+    text-decoration: none;
+  }
+  
+  @media (max-width: 480px) {
+    .footer {
+      font-size: 1.2rem;
+      padding: 10px;
+    }
+  }
+  
